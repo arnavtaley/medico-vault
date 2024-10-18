@@ -1,4 +1,5 @@
-import React from "react";
+import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -21,9 +22,9 @@ const Button: React.FC<ButtonProps> = ({
 
   // Conditional classes based on the button variant
   const variantClasses = {
-    primary: "bg-blue-500 text-white hover:bg-blue-600", // Primary button styling
-    outline: "bg-transparent border-2 border-gray-300 text-gray-700 hover:border-gray-400", // Outline button styling
-    danger: "bg-red-500 text-white hover:bg-red-600", // Danger button styling
+    primary: "bg-blue-500 text-white hover:bg-blue-600",
+    outline: "bg-transparent border-2 border-gray-300 text-gray-700 hover:border-gray-400",
+    danger: "bg-red-500 text-white hover:bg-red-600",
   }[variant];
 
   // Conditional classes based on the button size
@@ -33,15 +34,17 @@ const Button: React.FC<ButtonProps> = ({
     large: "px-6 py-3 text-lg",
   }[size];
 
-  // Classes for the disabled state
-  const disabledClasses = disabled
-    ? "opacity-50 cursor-not-allowed" // Apply opacity and disable cursor if the button is disabled
-    : "";
+  // Combine classes using clsx and merge using tailwind-merge
+  const buttonClasses = twMerge(
+    clsx(baseClasses, variantClasses, sizeClasses, {
+      "opacity-50 cursor-not-allowed": disabled,
+    })
+  );
 
   return (
     <button
       onClick={onClick}
-      className={`${baseClasses} ${variantClasses} ${sizeClasses} ${disabledClasses}`} // Combine the classes
+      className={buttonClasses}
       disabled={disabled}
     >
       {children}
